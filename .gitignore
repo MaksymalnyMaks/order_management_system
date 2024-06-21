@@ -126,6 +126,10 @@ Thumbs.db
 # JetBrains IDEs
 .idea/
 
+# pipenv files
+Pipfile
+Pipfile.lock
+
 # Custom files:
 configuration/secret_key.txt
 t.py
