@@ -1,0 +1,4 @@
+db_connection_info: localhost:5432
+db_name: flask_order_managment_db
+password: gAAAAABmdX6d2HDe1NJk_BQF47BsII7OL1OcIXT0FTLX9YVL-xBpQj4HHIouCYpLYukur2-EZVsknqevvE_M-4wfVibhEGMxh_N3Fbu6hJ0_ZuFzu037Lg8=
+username: postgres
