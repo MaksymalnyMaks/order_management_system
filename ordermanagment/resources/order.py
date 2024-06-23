@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from ordermanagment.models import Orders
 from datetime import datetime
 from ordermanagment import db
+from ordermanagment.enumerations.enums import Statuses
 
 
 class Order(Resource):
@@ -35,11 +36,12 @@ class Order(Resource):
         order = Orders.query.filter_by(order_id=order_id).first()
         if not order:
             abort(404, message="Record with given ID does not exist in the database!")
-        return order
+        return order, 200
 
     @marshal_with(resource_fields)
     def put(self, order_id):
         args = self.order_put_args.parse_args()
+        acceptable_statuses = (Statuses.NEW.value, Statuses.IN_PROGRESS.value, Statuses.COMPLETED.value)
 
         # Check if the order ID or order name already exists in the DB
         existing_order_id = Orders.query.filter_by(order_id=order_id).first()
@@ -49,6 +51,8 @@ class Order(Resource):
             abort(409, message="Record with given ID exists in the database!")
         if existing_order_name is not None:
             abort(409, message="Record with given order name exists in the database!")
+        if args['status'] not in acceptable_statuses:
+            abort(409, message=f"Wrong value of status provide! Acceptable statuses: {acceptable_statuses}")
 
         # Parse the creation date
         try:
@@ -73,6 +77,7 @@ class Order(Resource):
     @marshal_with(resource_fields)
     def patch(self, order_id):
         args = self.order_update_args.parse_args()
+        acceptable_statuses = (Statuses.NEW.value, Statuses.IN_PROGRESS.value, Statuses.COMPLETED.value)
 
         # Fetch the order by ID
         order = Orders.query.filter_by(order_id=order_id).first()
@@ -80,6 +85,10 @@ class Order(Resource):
         # Check if in the database exists order with given ID
         if order is None:
             abort(404, message="Record with given id dose not exist in Database, cannot update!")
+
+        # Check value of statuses if it was passed API request
+        if args['status'] is not None and args['status'] not in acceptable_statuses:
+            abort(404, message=f"Wrong value of status provide! Acceptable statuses: {acceptable_statuses}")
 
         # Check if the 'order_name' filed is supposed to be updated
         # Then check if new 'order_name' value is unique
