@@ -133,6 +133,10 @@ Pipfile.lock
 # Custom files:
 configuration/secret_key.txt
 t.py
+generate_xml.py
 
 # ignore directory where xlsx reprts are saved
 obtained_reports/*
+
+# ignore directory where xml files are saved
+obtained_xml_files/*
