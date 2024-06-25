@@ -12,5 +12,6 @@ db_name = ConfigurationHandler('db_name').load_raw_data_value()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{username}:{password}@{where_db}/{db_name}'
 db = SQLAlchemy(app)
+# db.create_all()
 api = Api(app)
 
